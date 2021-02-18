@@ -1,7 +1,5 @@
 #include "CSerializationBufferNet.h"
 
-int debugIndex = 0;
-
 CMemoryPoolTLS<CSerializationBuffer> CSerializationBuffer::memoryPool;
 
 CSerializationBuffer::CSerializationBuffer()
@@ -173,30 +171,26 @@ CSerializationBuffer& CSerializationBuffer::operator=(CSerializationBuffer& clSr
 //	return *chpSrc;
 //}
 
-int CSerializationBuffer::PutContentData(char* chpSrc, int iSize)
+void CSerializationBuffer::PutContentData(char* chpSrc, int iSize)
 {
 	memcpy(chpWritePos, chpSrc, iSize);
 	chpWritePos += iSize;
-	return *chpSrc;
 }
 
-int CSerializationBuffer::GetContentData(char* chpSrc, int iSize)
+void CSerializationBuffer::GetContentData(char* chpSrc, int iSize)
 {
 	memcpy(chpSrc, chpReadPos, iSize);
 	chpReadPos += iSize;
-	return *chpSrc;
 }
 
-int CSerializationBuffer::PutNetworkHeader(char* chpSrc, int iSize)
+void CSerializationBuffer::PutNetworkHeader(char* chpSrc, int iSize)
 {
 	memcpy(chpBufferPtr, chpSrc, iSize);
-	return *chpSrc;
 }
 
-int CSerializationBuffer::GetNetworkHeader(char* chpSrc, int iSize)
+void CSerializationBuffer::GetNetworkHeader(char* chpSrc, int iSize)
 {
 	memcpy(chpSrc, chpBufferPtr, iSize);
-	return *chpSrc;
 }
 
 int CSerializationBuffer::GetContentUseSize()
@@ -217,19 +211,16 @@ int CSerializationBuffer::GetFreeSize()
 
 CSerializationBuffer* CSerializationBuffer::Alloc()
 {
-	CSerializationBuffer* serialBufPtr = memoryPool.Alloc();
+	CSerializationBuffer* pSerialBuf = memoryPool.Alloc();
 
-	InterlockedIncrement((LONG*)&debugIndex);
+	pSerialBuf->Clear();
 
-	serialBufPtr->Clear();
+	pSerialBuf->AddRef();
 
-	serialBufPtr->AddRef();
-
-	return serialBufPtr;
+	return pSerialBuf;
 }
 
 bool CSerializationBuffer::Free()
 {
-	InterlockedDecrement((LONG*)&debugIndex);
 	return memoryPool.Free(this);
 }

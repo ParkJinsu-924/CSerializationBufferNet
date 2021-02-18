@@ -27,10 +27,6 @@ public:
 	//버퍼포인터얻기
 	char* GetContentBufPtr();
 
-	//버퍼pos이동, 음수이동은 안됨
-	int MoveWritePos(int iSize);
-	int MoveReadPos(int iSize);
-
 	int AddRef();
 	void DeqRef();
 
@@ -40,13 +36,9 @@ public:
 
 	//int PutData(char* chpSrc, int iSrcSize);
 
-	int PutContentData(char* chpSrc, int iSize);
+	void PutContentData(char* chpSrc, int iSize);
 
-	int GetContentData(char* chpSrc, int iSize);
-
-	int PutNetworkHeader(char* chpSrc, int iSize);
-
-	int GetNetworkHeader(char* chpSrc, int iSize);
+	void GetContentData(char* chpSrc, int iSize);
 
 	int GetContentUseSize();
 
@@ -82,15 +74,21 @@ private:
 	char* chpBufferPtr;
 	//컨텐츠 버퍼의 시작점
 	char* chpContentBufferPtr;
-	
 	bool bEncodeFlag;
-	
 	int headerSize;
 
 	static CMemoryPoolTLS<CSerializationBuffer> memoryPool;
 
 private:
+	//버퍼pos이동, 음수이동은 안됨
+	int MoveWritePos(int iSize);
+	int MoveReadPos(int iSize);
+
 	static bool Encode(CSerializationBuffer*);
 	static bool Decode(CSerializationBuffer*);
+	
+	void PutNetworkHeader(char* chpSrc, int iSize);
+	void GetNetworkHeader(char* chpSrc, int iSize);
+	
 	char* GetBufferPtr();
 };
