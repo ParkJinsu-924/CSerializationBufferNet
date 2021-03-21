@@ -22,7 +22,7 @@
   //반환값 : 없음
   void DeqRef();
 ```
-* CSerializationBuffer::Alloc()함수로 직렬화버퍼를 할당받을 수 있습니다. Free()함수로 해재할 수 있습니다.
+* CSerializationBuffer::Alloc()함수로 직렬화버퍼를 할당받을 수 있습니다. Free()함수로 해제할 수 있습니다.
 ``` C
   //직렬화버퍼를 할당합니다.
   //반환값 : 직렬화버퍼 포인터
